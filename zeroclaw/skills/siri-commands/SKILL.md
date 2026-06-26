@@ -4,6 +4,32 @@ Ce skill traite les commandes envoyées depuis un **raccourci iPhone / Siri** ve
 zeroclaw (`POST /webhook`, corps `{"message": "<la commande dictée>"}`). L'agent interprète la
 phrase, agit, puis renvoie une réponse courte que Siri lit à voix haute.
 
+## Format de réponse OBLIGATOIRE (pour les commandes Siri)
+
+Pour ce skill, réponds **toujours et uniquement** par un objet JSON de cette forme — rien d'autre,
+pas de texte autour :
+
+```json
+{
+  "speak": "Phrase courte que Siri lit à voix haute.",
+  "actions": [ /* 0..n actions que le RACCOURCI exécutera sur l'iPhone */ ]
+}
+```
+
+Types d'`actions` que le raccourci sait exécuter (apps natives iOS) :
+
+```json
+{ "type": "calendar.add",  "title": "Véto — Rex", "start": "2026-07-02T15:00:00",
+  "end": "2026-07-02T15:30:00", "notes": "Rappel vaccins", "location": "Clinique des Baous" }
+
+{ "type": "reminder.add",  "title": "Rappeler le véto", "due": "2026-07-01T18:00:00" }
+```
+
+- Dates au format **ISO local** `YYYY-MM-DDTHH:MM:SS`.
+- Les envois WhatsApp et les infos partenaires sont faits **côté serveur** par l'agent (voir plus
+  bas) : ils ne sont **pas** dans `actions`, juste confirmés dans `speak`.
+- Si aucune action iPhone n'est nécessaire : `"actions": []`.
+
 ## Données de référence
 
 - **Contacts** : `zeroclaw/data/contacts.json` (nom → numéro WhatsApp). Voir
@@ -42,9 +68,18 @@ Exemples : « les horaires d'ouverture de notre partenaire vétérinaire le plus
 2. Si la commande dit **« envoie à <contact> »** → envoie l'info par WhatsApp (cf. type 1).
    Sinon → renvoie simplement l'info à Siri pour qu'elle la lise.
 
-### 3. Question / info générale
-Réponds normalement, en une ou deux phrases. Si une réponse standard existe déjà dans un autre
-skill (ex. `faq-horaires`), réutilise-la.
+### 3. Agenda / rappels (exécutés sur l'iPhone)
+Exemples : « ajoute un rdv véto pour Rex jeudi à 15h », « rappelle-moi d'appeler le toiletteur
+demain à 18h ».
+
+- Interprète la date/heure relative (« jeudi », « demain à 18h ») en **ISO local**.
+- Renvoie l'action correspondante (`calendar.add` ou `reminder.add`) dans `actions` — c'est le
+  **raccourci** qui crée l'événement dans l'app native (rien à stocker côté serveur).
+- Confirme dans `speak` la date interprétée (« C'est noté, jeudi 2 juillet à 15h »).
+
+### 4. Question / info générale
+Réponds dans `speak`, en une ou deux phrases, `actions` vide. Si une réponse standard existe déjà
+dans un autre skill (ex. `faq-horaires`), réutilise-la.
 
 ## Garde-fous
 

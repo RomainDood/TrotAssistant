@@ -127,7 +127,8 @@ docs/                      # architecture, identification OpenWA, guide Raspberr
 
 - [docs/architecture.md](docs/architecture.md) — flux d'un message, ports, sécurité
 - [docs/openwa-authentification.md](docs/openwa-authentification.md) — s'identifier sur WhatsApp (QR / link code)
-- [docs/siri-shortcuts.md](docs/siri-shortcuts.md) — piloter l'assistant avec Siri / raccourcis iPhone
+- [docs/siri-shortcuts.md](docs/siri-shortcuts.md) — piloter l'assistant avec Siri (commandes + actions Agenda/Rappels)
+- [docs/calendrier.md](docs/calendrier.md) — ajouts d'événements autonomes via CalDAV (iCloud/Google)
 - [docs/raspberry-pi.md](docs/raspberry-pi.md) — déploiement et autostart sur Raspberry Pi
 
 ## Avertissement

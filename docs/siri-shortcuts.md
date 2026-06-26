@@ -72,17 +72,64 @@ Sur l'iPhone, app **Raccourcis** → **+** → ajoute ces actions :
      - `Content-Type` : `application/json`
    - Corps de la requête : **JSON**
      - clé `message` → valeur = variable `Commande`
-3. **Obtenir la valeur du dictionnaire** : clé `reply` *(voir note ci-dessous)*.
+3. **Obtenir la valeur du dictionnaire** : clé `reply` *(= la réponse de l'agent ; voir note)*.
 4. **Énoncer le texte** (ou *Afficher*) → le résultat.
 
 Renomme le raccourci, par ex. « **TrotAssistant** ». Tu pourras dire :
 **« Dis Siri, TrotAssistant »** puis dicter, ou tout dire d'un coup si tu mets la phrase en
 paramètre.
 
-> 📝 **Champ de réponse** : le corps renvoyé par `/webhook` est du JSON. Le nom exact du champ
-> (`reply`, `response`, `text`…) peut varier selon la version de zeroclaw. Lance le raccourci une
-> fois avec une action **« Aperçu rapide »** sur la réponse pour voir la structure réelle, puis
-> ajuste la clé du « Obtenir la valeur du dictionnaire ».
+> 📝 **Champ de réponse** : le corps renvoyé par `/webhook` est du JSON. Le nom exact du champ qui
+> contient la réponse de l'agent (`reply`, `response`, `text`…) peut varier selon la version de
+> zeroclaw. Lance le raccourci une fois avec une action **« Aperçu rapide »** sur la réponse pour
+> voir la structure réelle, puis ajuste la clé du « Obtenir la valeur du dictionnaire ».
+
+---
+
+## Étape 5 (optionnel) — Faire exécuter des actions à l'iPhone (Agenda, Rappels)
+
+Pour « **ajoute un rdv véto jeudi à 15h** », l'iPhone est mieux placé que le Pi pour écrire dans
+l'Agenda (permissions natives, rien à stocker côté serveur). Le skill
+[`siri-commands`](../zeroclaw/skills/siri-commands/SKILL.md) répond alors par un JSON structuré :
+
+```json
+{
+  "speak": "C'est noté, jeudi 2 juillet à 15h.",
+  "actions": [
+    { "type": "calendar.add", "title": "Véto — Rex",
+      "start": "2026-07-02T15:00:00", "end": "2026-07-02T15:30:00",
+      "notes": "Rappel vaccins", "location": "Clinique des Baous" }
+  ]
+}
+```
+
+Le raccourci doit alors : énoncer `speak`, **puis** parcourir `actions` et exécuter chacune avec
+l'action native correspondante. Étapes à ajouter après l'étape 3 :
+
+1. **Obtenir la valeur du dictionnaire** : clé `speak` → **Énoncer le texte**.
+2. **Obtenir la valeur du dictionnaire** : clé `actions` (c'est une liste).
+3. **Répéter chaque élément** de `actions` :
+   - **Obtenir la valeur** `type` de l'élément.
+   - **Si** `type` = `calendar.add` :
+     - récupère `title`, `start`, `end`, `notes`, `location` (Obtenir la valeur du dictionnaire) ;
+     - convertis `start`/`end` en date (action **Obtenir les dates depuis l'entrée**, format ISO) ;
+     - action **Ajouter un nouvel événement** (Agenda) avec ces valeurs.
+   - **Sinon si** `type` = `reminder.add` :
+     - action **Ajouter un nouveau rappel** avec `title` et l'échéance `due`.
+
+> 💡 Le contrat `{ speak, actions[] }` est extensible : on peut ajouter `message.imessage`,
+> `maps.directions`, etc., et brancher de nouvelles actions natives dans le `Répéter`.
+>
+> ⚠️ Pour que le parsing marche, l'agent doit répondre **strictement** en JSON. C'est imposé par le
+> skill `siri-commands`. Si la réponse de l'agent est elle-même encapsulée dans un champ par la
+> gateway (`reply`), parse d'abord ce champ, puis **« Obtenir le dictionnaire depuis l'entrée »**
+> pour relire le JSON `{speak, actions}`.
+
+### Et sans l'iPhone (autonome) ?
+
+Si tu veux qu'un événement se crée **tout seul** (déclenché par un message WhatsApp, par ex.),
+l'iPhone n'est pas dans la boucle : c'est zeroclaw qui écrit dans l'agenda via **CalDAV**. Voir
+[docs/calendrier.md](calendrier.md).
 
 ## Étape 4 — Exemples de commandes
 
