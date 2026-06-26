@@ -1,7 +1,7 @@
 {
-  "_comment": "Copie ce fichier en contacts.json (gitignoré) et remplis tes contacts. Numéro au format international sans + ni espaces, suivi de @c.us.",
+  "_comment": "Copie ce fichier en contacts.json (gitignoré) et remplis tes contacts. WhatsApp: numéro international sans + ni espaces, suivi de @c.us. email: optionnel (pour le skill email).",
   "contacts": [
-    { "name": "Paul",  "aliases": ["Paulo"],        "whatsapp": "33611111111@c.us" },
-    { "name": "Marie", "aliases": ["Marie Dupont"], "whatsapp": "33622222222@c.us" }
+    { "name": "Paul",  "aliases": ["Paulo"],        "whatsapp": "33611111111@c.us", "email": "paul@example.com" },
+    { "name": "Marie", "aliases": ["Marie Dupont"], "whatsapp": "33622222222@c.us", "email": "marie@example.com" }
   ]
 }

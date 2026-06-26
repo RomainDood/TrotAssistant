@@ -105,6 +105,12 @@ téléphone, et **protégée**.
    ```
 4. **Construire le raccourci iPhone** : [siri-shortcuts.md](siri-shortcuts.md).
 
+## 5bis. (Option) Gmail — lire / envoyer des mails
+
+Connecteur MCP (Node via `npx`, rien à installer). Renseigne `GMAIL_USER` / `GMAIL_APP_PASSWORD`
+dans `.env` (mot de passe d'application), puis `pm2 restart zeroclaw`. Procédure :
+[gmail.md](gmail.md).
+
 ## 6. (Option) Agenda autonome (CalDAV)
 
 Seulement si tu veux que zeroclaw ajoute des événements **sans l'iPhone** (ex. déclenché par un

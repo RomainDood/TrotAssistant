@@ -47,3 +47,19 @@ enabled = true
 sops_dir               = "zeroclaw/sops"
 default_execution_mode = "autonomous"   # réponses auto. Passe à "supervised"
                                          # pour valider chaque réponse à la main.
+
+# --- Connecteurs MCP (outils externes) -----------------------------------------
+[mcp]
+enabled          = true
+deferred_loading = true   # l'agent découvre les outils MCP à la demande
+
+# Gmail (lire / chercher / envoyer des mails) via mcp-mail-server (Node, lancé par npx).
+# Identifiants dans .env : GMAIL_USER + GMAIL_APP_PASSWORD (mot de passe d'application Gmail).
+# Outils exposés : gmail__send_email, gmail__reply_to_email, gmail__search_by_sender,
+#                  gmail__get_unseen_messages, gmail__search_since_date, etc.
+[[mcp.servers]]
+name      = "gmail"
+transport = "stdio"
+command   = "npx"
+args      = ["-y", "mcp-mail-server"]
+env       = { IMAP_HOST = "imap.gmail.com", IMAP_PORT = "993", IMAP_SECURE = "true", SMTP_HOST = "smtp.gmail.com", SMTP_PORT = "465", SMTP_SECURE = "true", EMAIL_USER = "${GMAIL_USER}", EMAIL_PASS = "${GMAIL_APP_PASSWORD}" }

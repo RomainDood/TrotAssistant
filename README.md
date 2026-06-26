@@ -148,6 +148,7 @@ docs/                      # architecture, identification OpenWA, guide Raspberr
 - [docs/openwa-authentification.md](docs/openwa-authentification.md) — s'identifier sur WhatsApp (QR / link code)
 - [docs/siri-shortcuts.md](docs/siri-shortcuts.md) — piloter l'assistant avec Siri (commandes + actions Agenda/Rappels)
 - [docs/calendrier.md](docs/calendrier.md) — ajouts d'événements autonomes via CalDAV (iCloud/Google)
+- [docs/gmail.md](docs/gmail.md) — lire / chercher / envoyer des mails (connecteur MCP)
 - [docs/raspberry-pi.md](docs/raspberry-pi.md) — déploiement et autostart sur Raspberry Pi
 
 ## Avertissement
