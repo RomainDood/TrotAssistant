@@ -78,6 +78,9 @@ zeroclaw auth setup-token --provider anthropic --profile default
 ./scripts/start-openwa.sh
 ```
 
+> 🔐 Première connexion WhatsApp (QR code ou link code) : voir
+> [docs/openwa-authentification.md](docs/openwa-authentification.md).
+
 ### 4. Lancer (Raspberry Pi, en service)
 Voir [docs/raspberry-pi.md](docs/raspberry-pi.md) — installation + autostart via **pm2** (ou systemd).
 
@@ -104,8 +107,14 @@ openwa/
   cli-config.json          # config OpenWA EASY API
 scripts/                   # install + lancement
 ecosystem.config.js        # pm2 (OpenWA + zeroclaw)
-docs/                      # architecture + guide Raspberry Pi
+docs/                      # architecture, identification OpenWA, guide Raspberry Pi
 ```
+
+## Documentation
+
+- [docs/architecture.md](docs/architecture.md) — flux d'un message, ports, sécurité
+- [docs/openwa-authentification.md](docs/openwa-authentification.md) — s'identifier sur WhatsApp (QR / link code)
+- [docs/raspberry-pi.md](docs/raspberry-pi.md) — déploiement et autostart sur Raspberry Pi
 
 ## Avertissement
 
