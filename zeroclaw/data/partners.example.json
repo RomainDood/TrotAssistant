@@ -1,0 +1,21 @@
+{
+  "_comment": "Copie ce fichier en partners.json (gitignoré) et remplis tes partenaires.",
+  "partners": [
+    {
+      "name": "Clinique Vétérinaire des Baous",
+      "type": "vétérinaire",
+      "city": "Saint-Jeannet",
+      "address": "12 av. des Baous, 06640 Saint-Jeannet",
+      "phone": "+33 4 93 00 00 00",
+      "hours": "Lun–Ven 9h–19h, Sam 9h–12h"
+    },
+    {
+      "name": "VetNice Centre",
+      "type": "vétérinaire",
+      "city": "Nice",
+      "address": "5 rue de France, 06000 Nice",
+      "phone": "+33 4 93 11 11 11",
+      "hours": "Lun–Sam 8h30–20h, urgences 7j/7"
+    }
+  ]
+}

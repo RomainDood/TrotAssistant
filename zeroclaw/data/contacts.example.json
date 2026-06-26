@@ -1,0 +1,7 @@
+{
+  "_comment": "Copie ce fichier en contacts.json (gitignoré) et remplis tes contacts. Numéro au format international sans + ni espaces, suivi de @c.us.",
+  "contacts": [
+    { "name": "Paul",  "aliases": ["Paulo"],        "whatsapp": "33611111111@c.us" },
+    { "name": "Marie", "aliases": ["Marie Dupont"], "whatsapp": "33622222222@c.us" }
+  ]
+}

@@ -9,7 +9,8 @@ _IGNORE_*/
 session*.data.json
 *.data.json
 openwa-session/
-data/
+# session OpenWA à la racine uniquement (ne pas attraper zeroclaw/data/)
+/data/
 
 # zeroclaw data local (mémoire SQLite, auth profiles)
 .zeroclaw/
