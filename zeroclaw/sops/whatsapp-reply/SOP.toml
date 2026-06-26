@@ -1,0 +1,13 @@
+# SOP : whatsapp-reply
+# Déclenchée à chaque message WhatsApp entrant posté par OpenWA sur le webhook.
+
+[trigger]
+type = "webhook"
+path = "/webhook/whatsapp"
+# Ne traiter que les vrais messages entrants (OpenWA envoie aussi d'autres events).
+condition = "$.event == \"onMessage\""
+
+[[steps]]
+title                 = "Comprendre le message et répondre via un skill"
+suggested_tools       = ["skills", "http"]
+requires_confirmation = false

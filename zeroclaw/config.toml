@@ -1,0 +1,47 @@
+# =============================================================================
+# TrotAssistant — configuration zeroclaw
+# =============================================================================
+# Lancement :  zeroclaw gateway --config ./zeroclaw/config.toml
+#
+# ⚠️ Les clés ci-dessous suivent le schéma documenté de zeroclaw mais celui-ci
+#    évolue. Au premier déploiement, génère une base saine avec :
+#        zeroclaw quickstart
+#    puis reporte les blocs [channels.webhook.*] / [sop] / [agents.*] ci-dessous.
+# =============================================================================
+
+# --- Gateway HTTP/WS (reçoit le webhook OpenWA) ---------------------------------
+[gateway]
+host = "127.0.0.1"
+port = 42617
+require_pairing = false        # accès local uniquement, derrière OpenWA
+
+# --- Provider LLM : Claude via abonnement (OAuth setup-token) -------------------
+# Génère le token UNE FOIS (token sk-ant-oat*, pas de facturation API) :
+#   zeroclaw auth setup-token --provider anthropic --profile default
+# Pour utiliser une clé API classique à la place, ajoute  api_key = "sk-ant-..."
+[providers.models.anthropic.home]
+model = "claude-sonnet-4-5"
+# auth_profile = "default"     # décommente si ta version le requiert explicitement
+
+# --- Agent ---------------------------------------------------------------------
+[agents.default]
+identity       = "TrotAssistant"
+model_provider = "anthropic.home"
+risk_profile   = "supervised"  # autorise les réponses auto mais bloque le high-risk
+workspace      = "~/trotassistant/workspace"
+
+# --- Channel webhook entrant (OpenWA poste ici) --------------------------------
+# Expose  POST  http://127.0.0.1:42617/webhook/whatsapp
+[channels.webhook.whatsapp]
+path   = "/webhook/whatsapp"
+secret = "${TROT_WEBHOOK_SECRET}"   # vérifié via header (cf. .env)
+
+# --- Skills --------------------------------------------------------------------
+[skills]
+enabled = true
+
+# --- SOP engine (déclencheurs) -------------------------------------------------
+[sop]
+sops_dir               = "zeroclaw/sops"
+default_execution_mode = "autonomous"   # réponses auto. Passe à "supervised"
+                                         # pour valider chaque réponse à la main.
