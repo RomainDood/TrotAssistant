@@ -9,11 +9,13 @@
 #    puis reporte les blocs [channels.webhook.*] / [sop] / [agents.*] ci-dessous.
 # =============================================================================
 
-# --- Gateway HTTP/WS (reçoit le webhook OpenWA) ---------------------------------
+# --- Gateway HTTP/WS (reçoit le webhook OpenWA + les commandes Siri) ------------
 [gateway]
+# 127.0.0.1 = local seul. Pour piloter via Siri/iPhone (Tailscale ou même Wi-Fi),
+# passe à "0.0.0.0" et garde require_pairing = true (bearer token). Cf. docs/siri-shortcuts.md
 host = "127.0.0.1"
 port = 42617
-require_pairing = false        # accès local uniquement, derrière OpenWA
+require_pairing = false        # mets true (+ bearer) si la gateway est joignable depuis l'iPhone
 
 # --- Provider LLM : Claude via abonnement (OAuth setup-token) -------------------
 # Génère le token UNE FOIS (token sk-ant-oat*, pas de facturation API) :

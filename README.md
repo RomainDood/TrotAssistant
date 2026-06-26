@@ -25,6 +25,18 @@ WhatsApp ──► OpenWA (Node + Chromium headless)
 On ne code **aucun pont** : OpenWA poste directement son webhook à zeroclaw, et zeroclaw rappelle
 l'API REST d'OpenWA (`/sendText`) pour envoyer la réponse. Tout est en config + skills/SOP.
 
+### Bonus : piloter avec Siri 🗣️
+
+Un **raccourci iPhone** envoie des commandes en langage naturel à la même gateway zeroclaw
+(`POST /webhook`) : « *Dis à Paul que j'arrive* », « *les horaires du vétérinaire le plus proche de
+Nice* ». L'agent interprète et agit (envoi WhatsApp, info partenaire), puis Siri lit la réponse.
+
+```
+Siri (dictée) ──► Raccourci iPhone ──► POST /webhook ──► zeroclaw (skill siri-commands) ──► action
+```
+
+Guide complet : [docs/siri-shortcuts.md](docs/siri-shortcuts.md).
+
 | Pièce        | Rôle                                                    | Techno            |
 |--------------|---------------------------------------------------------|-------------------|
 | **OpenWA**   | Capter / envoyer les messages WhatsApp                  | `@open-wa/wa-automate` (Node) |
@@ -102,7 +114,8 @@ déclenchement dans [`zeroclaw/sops/`](zeroclaw/sops/). Pour en ajouter une, voi
 zeroclaw/
   config.toml              # provider Claude, channel webhook, agent, SOP
   sops/whatsapp-reply/     # SOP déclenchée à chaque message entrant
-  skills/                  # réponses standardisées (FAQ, horaires, ...)
+  skills/                  # réponses standardisées (FAQ, horaires, commandes Siri)
+  data/                    # contacts.json + partners.json (gitignorés, voir *.example.json)
 openwa/
   cli-config.json          # config OpenWA EASY API
 scripts/                   # install + lancement
@@ -114,6 +127,7 @@ docs/                      # architecture, identification OpenWA, guide Raspberr
 
 - [docs/architecture.md](docs/architecture.md) — flux d'un message, ports, sécurité
 - [docs/openwa-authentification.md](docs/openwa-authentification.md) — s'identifier sur WhatsApp (QR / link code)
+- [docs/siri-shortcuts.md](docs/siri-shortcuts.md) — piloter l'assistant avec Siri / raccourcis iPhone
 - [docs/raspberry-pi.md](docs/raspberry-pi.md) — déploiement et autostart sur Raspberry Pi
 
 ## Avertissement

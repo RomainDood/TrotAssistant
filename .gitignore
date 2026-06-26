@@ -15,6 +15,10 @@ data/
 .zeroclaw/
 workspace/
 
+# Données perso (contacts / partenaires) — garder seulement les *.example.json
+zeroclaw/data/*.json
+!zeroclaw/data/*.example.json
+
 # Node
 node_modules/
 npm-debug.log*
