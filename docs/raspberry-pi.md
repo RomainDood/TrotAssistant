@@ -30,6 +30,11 @@ cd TrotAssistant
 ./scripts/install-pi.sh        # node 20, chromium, deps, zeroclaw, pm2
 ```
 
+> 💡 **Raccourcis `mise` (optionnel)** : installe `mise` (`curl https://mise.run | sh`, ~25 Mo) puis
+> `mise trust`. Chaque étape de ce guide a alors un équivalent court : `mise run setup`, `auth`,
+> `data`, `start`, `qr`, `boot`, `health`, `pair`… (`mise tasks` pour la liste). Le `.env` est chargé
+> automatiquement. Place négligeable sur le Pi (le gros poste reste Chromium).
+
 ## 2. Configuration
 
 ```bash

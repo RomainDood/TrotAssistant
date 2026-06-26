@@ -102,6 +102,25 @@ pm2 start ecosystem.config.js  # démarre OpenWA + zeroclaw
 pm2 save && pm2 startup        # relance au reboot
 ```
 
+### Raccourcis avec `mise` (optionnel, recommandé)
+
+[mise](https://mise.jdx.dev) (« mise-en-place ») transforme toutes ces commandes en tâches simples.
+Binaire ~25 Mo, négligeable sur un Pi ; il charge aussi le `.env` automatiquement.
+
+```bash
+curl https://mise.run | sh      # installe mise (une fois)
+mise trust                      # autorise le mise.toml du projet
+mise tasks                      # liste toutes les commandes dispo
+
+mise run setup                  # = install des dépendances
+mise run auth                   # = connecte l'abonnement Claude
+mise run data                   # = crée contacts.json / partners.json
+mise run start                  # = démarre OpenWA + zeroclaw
+mise run qr                     # = affiche le QR WhatsApp
+mise run boot                   # = autostart au reboot
+mise run health                 # = vérifie gateway + connexion WhatsApp
+```
+
 ## Skills / réponses standard
 
 Les réponses récurrentes vivent dans [`zeroclaw/skills/`](zeroclaw/skills/) et la logique de

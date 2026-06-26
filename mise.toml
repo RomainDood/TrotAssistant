@@ -1,0 +1,80 @@
+# mise — raccourcis de commandes pour TrotAssistant.
+# Installer mise : curl https://mise.run | sh   (binaire ~25 Mo, négligeable sur un Pi)
+# Lister les tâches :  mise tasks
+# Lancer une tâche  :  mise run <nom>
+
+# Charge automatiquement le .env dans l'environnement des tâches (OPENWA_API_KEY, etc.)
+[env]
+_.file = ".env"
+
+# (Optionnel) laisser mise gérer Node au lieu de l'apt système — décommente si tu veux :
+# [tools]
+# node = "20"
+
+# ---------------------------------------------------------------------------
+# Installation & configuration
+# ---------------------------------------------------------------------------
+[tasks.setup]
+description = "Installe les dépendances (node, chromium, zeroclaw, pm2)"
+run = "./scripts/install-pi.sh"
+
+[tasks.auth]
+description = "Connecte l'abonnement Claude (token sk-ant-oat*)"
+run = "zeroclaw auth setup-token --provider anthropic --profile default"
+
+[tasks.data]
+description = "Crée les fichiers de données depuis les exemples (s'ils n'existent pas)"
+run = """
+cp -n zeroclaw/data/contacts.example.json zeroclaw/data/contacts.json || true
+cp -n zeroclaw/data/partners.example.json zeroclaw/data/partners.json || true
+echo "→ édite zeroclaw/data/contacts.json et partners.json"
+"""
+
+# ---------------------------------------------------------------------------
+# Cycle de vie (pm2)
+# ---------------------------------------------------------------------------
+[tasks.start]
+description = "Démarre OpenWA + zeroclaw"
+run = "pm2 start ecosystem.config.js"
+
+[tasks.stop]
+description = "Arrête tout"
+run = "pm2 stop all"
+
+[tasks.restart]
+description = "Redémarre tout (recharge config/skills/SOP/données)"
+run = "pm2 restart all"
+
+[tasks.status]
+description = "État des process"
+run = "pm2 status"
+
+[tasks.logs]
+description = "Logs en direct (les deux process)"
+run = "pm2 logs"
+
+[tasks.qr]
+description = "Affiche le QR WhatsApp (1er jumelage)"
+run = "pm2 logs openwa"
+
+[tasks.boot]
+description = "Active le démarrage automatique au reboot du Pi"
+run = "pm2 save && pm2 startup"
+
+# ---------------------------------------------------------------------------
+# Siri / vérifications
+# ---------------------------------------------------------------------------
+[tasks.pair]
+description = "Obtient un jeton bearer pour Siri — usage : CODE=xxxx mise run pair"
+run = 'curl -fsS -X POST http://127.0.0.1:42617/pair -H "X-Pairing-Code: ${CODE:?passe CODE=<code> ; voir zeroclaw status}"'
+
+[tasks.health]
+description = "Vérifie la gateway zeroclaw + la connexion WhatsApp"
+run = """
+curl -s http://127.0.0.1:42617/ -o /dev/null -w 'gateway HTTP %{http_code}\\n'
+curl -s -X POST http://127.0.0.1:8002/getConnectionState -H "api_key: ${OPENWA_API_KEY:-}" | cat
+"""
+
+[tasks.cal-test]
+description = "Teste l'ajout d'un événement CalDAV (option B)"
+run = './scripts/calendar-add.sh --title "Test TrotAssistant" --start "2026-07-02T15:00:00" --end "2026-07-02T15:30:00"'
