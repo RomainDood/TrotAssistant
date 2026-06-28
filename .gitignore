@@ -1,7 +1,6 @@
 # Secrets / env
 .env
 *.local
-
 # OpenWA session & cache (contient l'auth WhatsApp — NE JAMAIS committer)
 _IGNORE_*/
 .wwebjs_auth/
@@ -11,28 +10,28 @@ session*.data.json
 openwa-session/
 # session OpenWA à la racine uniquement (ne pas attraper zeroclaw/data/)
 /data/
-
 # zeroclaw data local (mémoire SQLite, auth profiles)
 .zeroclaw/
 workspace/
-
 # Données perso (contacts / partenaires) — garder seulement les *.example.json
 zeroclaw/data/*.json
 !zeroclaw/data/*.example.json
-
 # Node
 node_modules/
 npm-debug.log*
 yarn-error.log*
-
 # Logs / pm2
 *.log
 .pm2/
-
 # OS
 .DS_Store
-
 # Artefacts générés par OpenWA EASY API (peuvent contenir des secrets)
 open-wa-session.*
 *.sw_col.json
 *.postman_collection.json
+
+# managed by open-wa
+**.data.json
+**.node-persist**
+**_IGNORE_**
+# end managed by open-wa

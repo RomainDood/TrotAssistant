@@ -1,22 +1,14 @@
 #!/usr/bin/env bash
-# Lance OpenWA (EASY API) : reçoit/envoie les messages WhatsApp et poste le webhook à zeroclaw.
+# Lance le pont WhatsApp (open-wa en bibliothèque) -> zeroclaw.
+# Au 1er lancement, un QR code s'affiche : scanne-le avec WhatsApp (Appareils connectés).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# Charge .env
-if [ -f .env ]; then
-  set -a; . ./.env; set +a
+# Dépendances installées ?
+if [ ! -d node_modules/@open-wa ]; then
+  echo "▶ Installation des dépendances Node (npm install)…"
+  npm install
 fi
 
-: "${OPENWA_API_KEY:?Définis OPENWA_API_KEY dans .env}"
-: "${ZEROCLAW_WEBHOOK_URL:?Définis ZEROCLAW_WEBHOOK_URL dans .env}"
-: "${OPENWA_PORT:=8002}"
-
-echo "▶ OpenWA sur le port ${OPENWA_PORT}, webhook → ${ZEROCLAW_WEBHOOK_URL}"
-
-exec npx --yes @open-wa/wa-automate@latest \
-  --config ./openwa/cli-config.json \
-  --port "${OPENWA_PORT}" \
-  --key "${OPENWA_API_KEY}" \
-  --webhook "${ZEROCLAW_WEBHOOK_URL}" \
-  ${OPENWA_LICENSE_KEY:+--license-key "${OPENWA_LICENSE_KEY}"}
+echo "▶ Pont WhatsApp -> zeroclaw (openwa/bridge.mjs)"
+exec node --env-file=.env openwa/bridge.mjs

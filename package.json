@@ -1,0 +1,13 @@
+{
+  "name": "trotassistant",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pont WhatsApp (open-wa) -> zeroclaw pour TrotAssistant",
+  "scripts": {
+    "bridge": "node --env-file=.env openwa/bridge.mjs"
+  },
+  "dependencies": {
+    "@open-wa/wa-automate": "^4.76.0"
+  }
+}
