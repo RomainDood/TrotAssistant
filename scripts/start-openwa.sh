@@ -15,7 +15,7 @@ fi
 echo "▶ OpenWA sur le port ${OPENWA_PORT}, webhook → ${ZEROCLAW_WEBHOOK_URL}"
 
 exec npx --yes @open-wa/wa-automate@latest \
-  --config-file ./openwa/cli-config.json \
+  --config ./openwa/cli-config.json \
   --port "${OPENWA_PORT}" \
   --key "${OPENWA_API_KEY}" \
   --webhook "${ZEROCLAW_WEBHOOK_URL}" \

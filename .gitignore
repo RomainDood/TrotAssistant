@@ -31,3 +31,8 @@ yarn-error.log*
 
 # OS
 .DS_Store
+
+# Artefacts générés par OpenWA EASY API (peuvent contenir des secrets)
+open-wa-session.*
+*.sw_col.json
+*.postman_collection.json
