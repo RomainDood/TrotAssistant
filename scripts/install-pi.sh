@@ -42,7 +42,7 @@ echo
 echo "✅ Installation terminée."
 echo "Prochaines étapes :"
 echo "  1) cp .env.example .env   puis édite-le"
-echo "  2) zeroclaw auth setup-token --provider anthropic --profile default"
+echo "  2) zeroclaw auth setup-token --model-provider anthropic --profile default"
 echo "  3) pm2 start ecosystem.config.js"
 echo "  4) pm2 logs openwa   (scanne le QR code au 1er lancement)"
 echo "  5) pm2 save && pm2 startup"

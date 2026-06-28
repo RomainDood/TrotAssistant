@@ -42,7 +42,7 @@ cp .env.example .env
 nano .env        # OPENWA_API_KEY, TROT_WEBHOOK_SECRET, ALLOWED_NUMBERS, (OPENWA_LICENSE_KEY)
 
 # Auth Claude (abonnement) — token sk-ant-oat*, pas de facturation API :
-zeroclaw auth setup-token --provider anthropic --profile default
+zeroclaw auth setup-token --model-provider anthropic --profile default
 ```
 
 ### Données de l'assistant (contacts + partenaires)

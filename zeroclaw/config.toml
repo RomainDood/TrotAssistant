@@ -21,7 +21,7 @@ require_pairing = false        # mets true (+ bearer) si la gateway est joignabl
 
 # --- Provider LLM : Claude via abonnement (OAuth setup-token) -------------------
 # Génère le token UNE FOIS (token sk-ant-oat*, pas de facturation API) :
-#   zeroclaw auth setup-token --provider anthropic --profile default
+#   zeroclaw auth setup-token --model-provider anthropic --profile default
 # Pour utiliser une clé API classique à la place, ajoute  api_key = "sk-ant-..."
 [providers.models.anthropic.home]
 model = "claude-sonnet-4-5"

@@ -50,7 +50,7 @@ clé API facturée. zeroclaw stocke ce token dans un profil d'auth local ; tu g�
 seule fois :
 
 ```bash
-zeroclaw auth setup-token --provider anthropic --profile default
+zeroclaw auth setup-token --model-provider anthropic --profile default
 ```
 
 > ⚠️ Depuis 2026, l'usage des crédits d'abonnement par des outils tiers est encadré par Anthropic.
@@ -78,7 +78,7 @@ cp .env.example .env
 # édite .env : OPENWA_API_KEY, TROT_WEBHOOK_SECRET, ALLOWED_NUMBERS, (OPENWA_LICENSE_KEY)
 
 # auth Claude (abonnement) :
-zeroclaw auth setup-token --provider anthropic --profile default
+zeroclaw auth setup-token --model-provider anthropic --profile default
 ```
 
 ### 3. Lancer (dev, deux terminaux)

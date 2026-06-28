@@ -20,7 +20,7 @@ run = "./scripts/install-pi.sh"
 
 [tasks.auth]
 description = "Connecte l'abonnement Claude (token sk-ant-oat*)"
-run = "zeroclaw auth setup-token --provider anthropic --profile default"
+run = "zeroclaw auth setup-token --model-provider anthropic --profile default"
 
 [tasks.data]
 description = "Crée les fichiers de données depuis les exemples (s'ils n'existent pas)"
