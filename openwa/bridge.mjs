@@ -9,13 +9,16 @@ const {
   ZEROCLAW_WEBHOOK = 'http://127.0.0.1:42617/webhook',
   ZEROCLAW_BEARER = '',
   ALLOWED_NUMBERS = '',
+  // Mode navigateur : visible par défaut (fiable pour scanner le QR sur un Mac).
+  // Mets OPENWA_HEADLESS=true une fois la session enregistrée, ou sur un serveur sans écran.
+  OPENWA_HEADLESS = 'false',
 } = process.env;
 
 const allow = ALLOWED_NUMBERS.split(',').map((s) => s.trim()).filter(Boolean);
 
 create({
   sessionId: 'trotassistant',
-  headless: true,
+  headless: OPENWA_HEADLESS === 'true',
   useChrome: true,
   qrTimeout: 0,
   authTimeout: 0,
