@@ -13,5 +13,8 @@ if ! command -v zeroclaw >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "▶ zeroclaw gateway (config ./zeroclaw/config.toml)"
-exec zeroclaw gateway --config ./zeroclaw/config.toml
+# En v0.8.x, la config vit dans le dossier de config (~/.zeroclaw par défaut), pas via --config.
+# On l'amorce une fois avec `zeroclaw quickstart`, puis on reporte les réglages du
+# template zeroclaw/config.toml (via `zeroclaw config set ...` ou en éditant ~/.zeroclaw/config.toml).
+echo "▶ zeroclaw gateway start"
+exec zeroclaw gateway start

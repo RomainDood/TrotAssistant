@@ -12,9 +12,11 @@
 # --- Gateway HTTP/WS (reçoit le webhook OpenWA + les commandes Siri) ------------
 [gateway]
 # 127.0.0.1 = local seul. Pour piloter via Siri/iPhone (Tailscale ou même Wi-Fi),
-# passe à "0.0.0.0" et garde require_pairing = true (bearer token). Cf. docs/siri-shortcuts.md
+# passe à "0.0.0.0", mets allow_public_bind = true, et garde require_pairing = true
+# (bearer token). Cf. docs/siri-shortcuts.md
 host = "127.0.0.1"
 port = 42617
+# allow_public_bind = true     # requis pour écouter sur 0.0.0.0 (accès iPhone)
 require_pairing = false        # mets true (+ bearer) si la gateway est joignable depuis l'iPhone
 
 # --- Provider LLM : Claude via abonnement (OAuth setup-token) -------------------
@@ -33,10 +35,12 @@ risk_profile   = "supervised"  # autorise les réponses auto mais bloque le high
 workspace      = "~/trotassistant/workspace"
 
 # --- Channel webhook entrant (OpenWA poste ici) --------------------------------
-# Expose  POST  http://127.0.0.1:42617/webhook/whatsapp
+# Expose  POST  http://127.0.0.1:42617/webhook/whatsapp  (champ = listen_path en v0.8.x)
 [channels.webhook.whatsapp]
-path   = "/webhook/whatsapp"
-secret = "${TROT_WEBHOOK_SECRET}"   # vérifié via header (cf. .env)
+listen_path = "/webhook/whatsapp"
+secret      = "${TROT_WEBHOOK_SECRET}"   # vérifié via header (cf. .env)
+# La v0.8.x peut aussi renvoyer la réponse directement (send_url / send_method) au lieu
+# d'un appel HTTP dans la SOP — à explorer selon ton besoin.
 
 # --- Skills --------------------------------------------------------------------
 [skills]
