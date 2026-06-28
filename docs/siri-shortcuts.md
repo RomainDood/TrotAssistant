@@ -72,17 +72,15 @@ Sur l'iPhone, app **Raccourcis** → **+** → ajoute ces actions :
      - `Content-Type` : `application/json`
    - Corps de la requête : **JSON**
      - clé `message` → valeur = variable `Commande`
-3. **Obtenir la valeur du dictionnaire** : clé `reply` *(= la réponse de l'agent ; voir note)*.
+3. **Obtenir la valeur du dictionnaire** : clé `response` *(= la réponse de l'agent)*.
 4. **Énoncer le texte** (ou *Afficher*) → le résultat.
 
 Renomme le raccourci, par ex. « **TrotAssistant** ». Tu pourras dire :
 **« Dis Siri, TrotAssistant »** puis dicter, ou tout dire d'un coup si tu mets la phrase en
 paramètre.
 
-> 📝 **Champ de réponse** : le corps renvoyé par `/webhook` est du JSON. Le nom exact du champ qui
-> contient la réponse de l'agent (`reply`, `response`, `text`…) peut varier selon la version de
-> zeroclaw. Lance le raccourci une fois avec une action **« Aperçu rapide »** sur la réponse pour
-> voir la structure réelle, puis ajuste la clé du « Obtenir la valeur du dictionnaire ».
+> 📝 **Format de réponse confirmé** (zeroclaw v0.8.2) : `/webhook` renvoie
+> `{"model":"...","response":"<texte de l'agent>"}`. La clé à lire est donc **`response`**.
 
 ---
 
@@ -121,9 +119,8 @@ l'action native correspondante. Étapes à ajouter après l'étape 3 :
 > `maps.directions`, etc., et brancher de nouvelles actions natives dans le `Répéter`.
 >
 > ⚠️ Pour que le parsing marche, l'agent doit répondre **strictement** en JSON. C'est imposé par le
-> skill `siri-commands`. Si la réponse de l'agent est elle-même encapsulée dans un champ par la
-> gateway (`reply`), parse d'abord ce champ, puis **« Obtenir le dictionnaire depuis l'entrée »**
-> pour relire le JSON `{speak, actions}`.
+> skill `siri-commands`. La gateway encapsule ce JSON dans son champ **`response`** : lis d'abord
+> `response`, puis **« Obtenir le dictionnaire depuis l'entrée »** pour relire le JSON `{speak, actions}`.
 
 ### Et sans l'iPhone (autonome) ?
 
