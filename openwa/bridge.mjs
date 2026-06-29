@@ -10,21 +10,75 @@ import makeWASocket, {
 } from '@whiskeysockets/baileys';
 import qrcode from 'qrcode-terminal';
 import pino from 'pino';
+import http from 'node:http';
 
 const {
   ZEROCLAW_WEBHOOK = 'http://127.0.0.1:42617/webhook',
   ZEROCLAW_BEARER = '',
   ALLOWED_NUMBERS = '',
+  // API d'envoi sortant (pour déclencher un message : curl / Siri / skill).
+  SEND_PORT = '8090',
+  SEND_SECRET = '',
 } = process.env;
 
 const allow = ALLOWED_NUMBERS.split(',').map((s) => s.trim()).filter(Boolean);
 const logger = pino({ level: 'silent' });
 
+let sock = null; // socket WhatsApp courant (mis à jour à chaque (re)connexion)
+
+// Transforme "33612345678" ou "...@s.whatsapp.net" en JID Baileys valide.
+function toJid(to) {
+  if (!to) return null;
+  if (to.includes('@')) return to;
+  return `${to.replace(/[^0-9]/g, '')}@s.whatsapp.net`;
+}
+
+// Petit serveur HTTP local : POST /send {to, text}  (protégé par SEND_SECRET).
+function startSendApi() {
+  http
+    .createServer(async (req, res) => {
+      if (req.method !== 'POST' || req.url !== '/send') {
+        res.writeHead(404).end('not found');
+        return;
+      }
+      if (SEND_SECRET && req.headers['x-send-secret'] !== SEND_SECRET) {
+        res.writeHead(401).end('unauthorized');
+        return;
+      }
+      let body = '';
+      req.on('data', (c) => (body += c));
+      req.on('end', async () => {
+        try {
+          const { to, text } = JSON.parse(body || '{}');
+          const jid = toJid(to);
+          if (!jid || !text) {
+            res.writeHead(400).end('to + text requis');
+            return;
+          }
+          if (!sock) {
+            res.writeHead(503).end('WhatsApp non connecté');
+            return;
+          }
+          await sock.sendMessage(jid, { text });
+          console.log(`⇢ (envoi déclenché) ${jid}: ${String(text).slice(0, 80)}`);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ sent: true, to: jid }));
+        } catch (err) {
+          console.error('Erreur /send:', err);
+          res.writeHead(500).end('erreur');
+        }
+      });
+    })
+    .listen(Number(SEND_PORT), '127.0.0.1', () => {
+      console.log(`📤 API d'envoi : POST http://127.0.0.1:${SEND_PORT}/send  {to, text}`);
+    });
+}
+
 async function start() {
   const { state, saveCreds } = await useMultiFileAuthState('./data/baileys');
   const { version } = await fetchLatestBaileysVersion();
 
-  const sock = makeWASocket({ version, auth: state, logger });
+  sock = makeWASocket({ version, auth: state, logger });
   sock.ev.on('creds.update', saveCreds);
 
   sock.ev.on('connection.update', (u) => {
@@ -92,6 +146,7 @@ async function start() {
   });
 }
 
+startSendApi();
 start().catch((e) => {
   console.error('Échec du lancement Baileys:', e);
   process.exit(1);
