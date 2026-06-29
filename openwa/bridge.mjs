@@ -12,6 +12,10 @@ const {
   // Mode navigateur : visible par défaut (fiable pour scanner le QR sur un Mac).
   // Mets OPENWA_HEADLESS=true une fois la session enregistrée, ou sur un serveur sans écran.
   OPENWA_HEADLESS = 'false',
+  // Chemin du vrai Chrome (sinon WhatsApp Web peut refuser un Chromium/UA trop ancien).
+  OPENWA_CHROME_PATH = '',
+  // User-agent moderne (WhatsApp Web exige Chrome 100+).
+  OPENWA_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
 } = process.env;
 
 const allow = ALLOWED_NUMBERS.split(',').map((s) => s.trim()).filter(Boolean);
@@ -20,6 +24,8 @@ create({
   sessionId: 'trotassistant',
   headless: OPENWA_HEADLESS === 'true',
   useChrome: true,
+  ...(OPENWA_CHROME_PATH ? { executablePath: OPENWA_CHROME_PATH } : {}),
+  customUserAgent: OPENWA_USER_AGENT,
   qrTimeout: 0,
   authTimeout: 0,
   cacheEnabled: false,
