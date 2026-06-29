@@ -18,6 +18,9 @@ host = "127.0.0.1"
 port = 42617
 # allow_public_bind = true     # requis pour écouter sur 0.0.0.0 (accès iPhone)
 require_pairing = false        # mets true (+ bearer) si la gateway est joignable depuis l'iPhone
+# Délai max d'une requête /webhook : 30 s par défaut = trop court pour une réponse LLM un peu
+# longue (timeout 408). On monte à 180 s. Réglage live : zeroclaw config set gateway.request_timeout_secs 180
+request_timeout_secs = 180
 
 # --- Provider LLM : Claude via abonnement (OAuth setup-token) -------------------
 # Génère le token UNE FOIS (token sk-ant-oat*, pas de facturation API) :
